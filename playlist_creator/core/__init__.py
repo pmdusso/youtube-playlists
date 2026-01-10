@@ -8,6 +8,7 @@ from .utils import (
     format_track_status,
     retry_with_backoff,
 )
+from .youtube_client import YouTubeClient
 
 __all__ = [
     "parse_markdown",
@@ -19,4 +20,5 @@ __all__ = [
     "format_track_status",
     "retry_with_backoff",
     "setup_logging",
+    "YouTubeClient",
 ]
