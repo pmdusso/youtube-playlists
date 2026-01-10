@@ -133,7 +133,7 @@ class YouTubeClient:
             query=f"{title} - {artist}",
             status=CacheStatus.FOUND,
             matches=matches,
-            selected=None,
+            selected=0,
             searched_at=datetime.now(),
             query_used=query,
         )
