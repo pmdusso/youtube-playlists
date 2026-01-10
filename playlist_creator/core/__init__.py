@@ -1,4 +1,5 @@
 """Core modules for YouTube Playlist Creator."""
+from .logger import setup_logging
 from .parser import parse_markdown, parse_markdown_string, ParsedPlaylist
 from .utils import (
     Icons,
@@ -17,4 +18,5 @@ __all__ = [
     "format_duration",
     "format_track_status",
     "retry_with_backoff",
+    "setup_logging",
 ]
