@@ -12,6 +12,7 @@ class ParsedPlaylist:
     """Result of parsing a Markdown playlist file."""
     name: str
     tracks: list[Track]
+    description: str = ""
 
 
 def parse_markdown(file_path: Path) -> ParsedPlaylist:
@@ -28,6 +29,12 @@ def parse_markdown_string(content: str) -> ParsedPlaylist:
         raise ParseError("No H1 title found. File must start with '# Playlist Name'")
 
     name = title_match.group(1).strip()
+
+    # Extract ## description (optional)
+    description = ""
+    desc_match = re.search(r"^##\s+(.+)$", content, re.MULTILINE)
+    if desc_match:
+        description = desc_match.group(1).strip()
 
     # Find all tables
     tracks = []
@@ -67,4 +74,4 @@ def parse_markdown_string(content: str) -> ParsedPlaylist:
 
     tracks.sort(key=lambda t: t.position)
 
-    return ParsedPlaylist(name=name, tracks=tracks)
+    return ParsedPlaylist(name=name, tracks=tracks, description=description)

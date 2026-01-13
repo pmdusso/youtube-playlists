@@ -23,12 +23,14 @@ from playlist_creator.models import CacheStatus
 @click.command("create")
 @click.argument("file", type=click.Path(exists=True, path_type=Path))
 @click.option("--name", help="Custom playlist name (overrides title from file)")
+@click.option("--description", help="Custom playlist description (overrides ## from file)")
 @click.option("--dry-run", is_flag=True, help="Show what would be done without creating")
 @click.option("--skip-missing", is_flag=True, help="Skip missing songs without confirmation")
 @click.option("--verbose", "-v", is_flag=True, help="Show detailed output")
 def create_command(
     file: Path,
     name: Optional[str],
+    description: Optional[str],
     dry_run: bool,
     skip_missing: bool,
     verbose: bool
@@ -41,7 +43,10 @@ def create_command(
         click.echo(f"{Icons.FOLDER} Lendo: {file}")
         playlist = parse_markdown(file)
         playlist_name = name or playlist.name
+        playlist_description = description or playlist.description
         click.echo(f"{Icons.PLAYLIST} Playlist: \"{playlist_name}\"")
+        if playlist_description:
+            click.echo(f"   {playlist_description}")
 
         # Load cache
         cache = CacheManager()
@@ -97,6 +102,8 @@ def create_command(
             click.echo("-" * 40)
             click.echo("[DRY-RUN] O que seria feito:")
             click.echo(f"   - Criar playlist \"{playlist_name}\" (privada)")
+            if playlist_description:
+                click.echo(f"   - Descricao: \"{playlist_description}\"")
             click.echo(f"   - Adicionar {len(tracks_ready)} musicas:")
             for track, video_id, _ in tracks_ready:
                 click.echo(f"     [{track.position}] {track.title} - {track.artist}")
@@ -111,7 +118,11 @@ def create_command(
         service = get_authenticated_service()
         youtube = YouTubeClient(service)
 
-        playlist_id = youtube.create_playlist(playlist_name, privacy=DEFAULT_PRIVACY)
+        playlist_id = youtube.create_playlist(
+            playlist_name,
+            description=playlist_description,
+            privacy=DEFAULT_PRIVACY
+        )
         click.echo(f"{Icons.SUCCESS} Playlist criada: https://youtube.com/playlist?list={playlist_id}")
 
         # Add videos
