@@ -33,11 +33,17 @@ Cria e sincroniza playlists do YouTube a partir de arquivos Markdown.
 ```markdown
 # Nome da Playlist
 
+## Descrição da playlist (opcional)
+
 | # | Música | Artista |
 |---|--------|---------|
 | 1 | Yeah! | Usher ft. Lil Jon & Ludacris |
 | 2 | In Da Club | 50 Cent |
 ```
+
+- `#` - Título da playlist (obrigatório)
+- `##` - Descrição (opcional, será usada no YouTube)
+- Tabela com colunas `#`, `Música`, `Artista` (obrigatório)
 
 ### Comandos
 
@@ -66,6 +72,7 @@ python main.py sync playlist.md --playlist-id PLxxxxx --dry-run
 | search | --force | Re-buscar músicas já no cache |
 | search | --verbose | Mostrar detalhes das buscas |
 | create | --name | Nome customizado da playlist |
+| create | --description | Descrição customizada (sobrescreve `##` do arquivo) |
 | create | --dry-run | Simular sem criar |
 | create | --skip-missing | Pular músicas não encontradas sem confirmar |
 | sync | --playlist-url | URL da playlist do YouTube |
